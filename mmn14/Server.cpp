@@ -21,25 +21,25 @@ void ServerInit::__userConnect() {
 	std::cout << "client connected!" << std::endl;
 }
 
-void ServerInit::__handlerequest() {
+void ServerInit::__handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	char clientmsg[1024] = { 0 };
-	recv(this->clientsocket, clientmsg, 1024, 0); 
+	recv(clientsocket, clientmsg, 1024, 0); 
 	std::cout << "client sent:" << std::endl;
 	std::cout << clientmsg << std::endl;
 
 	// the server will send echo to the client that the message have been recieved.
-	send(this->clientsocket, "Hello from server!", 18, 0);
+	send(clientsocket, "Hello from server!", 18, 0);
 
 	Sleep(10000);
 
-	closesocket(this->clientsocket); // closing the socket
+	closesocket(clientsocket); // closing the socket
 }
 
 void ServerInit::handleclient() {
 	this->__userConnect();
-	//std::thread ct(fn, this->clientsocket);
-	//ct.detach();
+	std::thread ct(__handlerequest, this->clientsocket);
+	ct.detach();
 }
 
 
