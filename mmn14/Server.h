@@ -30,7 +30,7 @@ public:
 	void handleclient();
 private:
 	void __userConnect();
-	void __handlerequest();
+	static void __handlerequest(SOCKET clientsocket);
 };
  
 
