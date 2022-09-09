@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-#define PORT 8082
+#define PORT 80
 
 
 
@@ -28,18 +28,11 @@ public:
 	~ServerInit();
 
 	void handleclient();
-	void __handlerequest();
+private:
 	void __userConnect();
-
+	void __handlerequest();
 };
-
-
-
-
-
-
-
-
+ 
 
 
 #endif
