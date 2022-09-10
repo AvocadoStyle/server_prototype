@@ -17,20 +17,27 @@ ServerInit::ServerInit() {
 void ServerInit::__userConnect() {
 	// accept() - blocking, waiting for client to connect the server.
 	std::cout << "waiting for clients to connect.." << std::endl;
-	this->clientsocket = accept(s, NULL, NULL);
-	std::cout << "client connected!" << std::endl;
+	//std::cout << "client connected!" << std::endl;
 }
 
 void ServerInit::__handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
+	std::cout << "client connected!" << std::endl;
+
 	char clientmsg[1024] = { 0 };
 	recv(clientsocket, clientmsg, 1024, 0); 
 	std::cout << "client sent:" << std::endl;
 	std::cout << clientmsg << std::endl;
-
+	std::cout << "debug1" << std::endl;
 	// the server will send echo to the client that the message have been recieved.
-	send(clientsocket, "Hello from server!", 18, 0);
-
+	std::string msg;
+	std::string html_msg;
+	std::string plaintext_msg;
+	msg = "HTTP/1.1 200 OK\n\n";
+	html_msg = msg + "<html><body>Kaki!<h1></h1></body></html>";
+	plaintext_msg = msg + "Kaki Gadol!";
+	send(clientsocket, plaintext_msg.c_str(), plaintext_msg.length(), 0);
+	std::cout << "debug2" << std::endl;
 	Sleep(10000);
 
 	closesocket(clientsocket); // closing the socket
@@ -38,7 +45,8 @@ void ServerInit::__handlerequest(SOCKET clientsocket) {
 
 void ServerInit::handleclient() {
 	this->__userConnect();
-	std::thread ct(__handlerequest, this->clientsocket);
+	SOCKET clientsocket = accept(s, NULL, NULL);
+	std::thread ct(__handlerequest, clientsocket);
 	ct.detach();
 }
 
