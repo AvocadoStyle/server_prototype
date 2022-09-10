@@ -56,14 +56,6 @@ void ServerInit::__handlerequest(SOCKET clientsocket) {
 	}
 
 
-
-
-
-
-
-
-
-
 	// the server will send echo to the client that the message have been recieved.
 	//std::string msg;
 	//std::string html_msg;
@@ -71,7 +63,7 @@ void ServerInit::__handlerequest(SOCKET clientsocket) {
 	//msg = "HTTP/1.1 200 OK\n\n";
 	//html_msg = msg + "<html><body>Kaki!<h1></h1></body></html>";
 	//plaintext_msg = msg + "Kaki Gadol!";
-	//send(clientsocket, plaintext_msg.c_str(), plaintext_msg.length(), 0);
+	send(clientsocket, msg.c_str(), msg.length(), 0);
 
 	//Sleep(10000);
 
