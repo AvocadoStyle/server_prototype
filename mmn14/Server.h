@@ -11,6 +11,12 @@
 
 #include <stdint.h>
 
+#include <thread>
+
+#include <string>
+#include <fstream>
+#include <sstream>
+
 #define PORT 8085
 
 
@@ -22,7 +28,7 @@ public:
 	SOCKET clientsocket;
 	WSADATA wsaData;
 	int ret = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	SOCKET serversocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	struct sockaddr_in sa = { 0 };
 	ServerInit();
 	~ServerInit();
@@ -31,6 +37,7 @@ public:
 private:
 	void __userConnect();
 	static void __handlerequest(SOCKET clientsocket);
+	static std::string __filetostring(const char* filename);
 };
  
 

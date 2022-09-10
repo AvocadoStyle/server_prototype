@@ -22,11 +22,4 @@ union uni {
 	char buff[sizeof(m)];
 };
 
-
-
-
-
-
-
-
 #endif
