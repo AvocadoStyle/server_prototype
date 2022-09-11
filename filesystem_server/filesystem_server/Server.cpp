@@ -30,6 +30,33 @@ std::string ServerInit::__filetostring(const char* filename) {
 	return ss.str();
 }
 
+int ServerInit::__request_op_handle(int OP) {
+	if (OP == OP_SAVE) {
+		// save to fs
+
+
+
+	} else if(OP == OP_RET){
+		// return from fs
+
+
+
+	} else if(OP == OP_DEL){
+		// delete from fs
+		return SUCCESS_FILE_FOUND_NOTIFICATION
+
+
+	}
+	else if (OP == OP_ALL_LIST) {
+		// return the name of the files of the user fs
+		return SUCCESS_ALL_LIST_NOTIFICATION;
+
+	} else {
+		// error handle
+		return GENERAL_ERR;
+	}
+}
+
 void ServerInit::_handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	std::cout << "client connected!" << std::endl;
@@ -39,24 +66,61 @@ void ServerInit::_handlerequest(SOCKET clientsocket) {
 	std::cout << "client sent:" << std::endl;
 	std::cout << clientmsg << std::endl;
 
-	std::string recv_msg = clientmsg;
-	size_t spos = recv_msg.find("GET /");
-	size_t epos = recv_msg.find("HTTP", spos + 5);
-	std::string reqfile = recv_msg.substr(spos + 5, epos - 6);
-	std::cout << "Requested file: " << reqfile << "|" << std::endl;
+	//withdraw the OP code
+	__request_op_handle(100);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//std::string recv_msg = clientmsg;
+	//size_t spos = recv_msg.find("GET /");
+	//size_t epos = recv_msg.find("HTTP", spos + 5);
+	//std::string reqfile = recv_msg.substr(spos + 5, epos - 6);
+	//std::cout << "Requested file: " << reqfile << "|" << std::endl;
 
 	//the server will send echo to the client that the message have been recieved
-	std::string msg;
-	msg = "HTTP/1.1 200 OK\n\n";
+	//std::string msg;
+	//msg = "HTTP/1.1 200 OK\n\n";
 
-	if (reqfile.empty()) {
-		//index.html ->>>> msg+= filetostring("index.html") >>>> make index.html to string.
-		msg += __filetostring("index.html");
-	}
-	else {
-		//load reqfile ->>>> msg+= filetostring(reqfile.c_str()); >>>> file requested if inside the server
-		msg += __filetostring(reqfile.c_str());
-	}
+	//if (reqfile.empty()) {
+	//	//index.html ->>>> msg+= filetostring("index.html") >>>> make index.html to string.
+	//	msg += __filetostring("index.html");
+	//}
+	//else {
+	//	//load reqfile ->>>> msg+= filetostring(reqfile.c_str()); >>>> file requested if inside the server
+	//	msg += __filetostring(reqfile.c_str());
+	//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

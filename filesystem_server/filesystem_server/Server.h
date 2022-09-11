@@ -19,8 +19,16 @@
 
 #define PORT 8085
 
+int OP_SAVE = 100;
+int OP_RET = 200;
+int OP_DEL = 201;
+int OP_ALL_LIST = 202;
 
-
+int SUCCESS_FILE_FOUND_NOTIFICATION = 210;
+int SUCCESS_ALL_LIST_NOTIFICATION = 211;
+int ERR_FILE_NOT_EXISTS = 1001;
+int ERR_NO_FILES_FOR_CLIENT = 1002;
+int GENERAL_ERR = 1003;
 
 
 class ServerInit {
@@ -40,6 +48,7 @@ protected:
 
 private:
 	static std::string __filetostring(const char* filename);
+	static int __request_op_handle(int OP);
 };
 
 
