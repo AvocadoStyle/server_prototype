@@ -1,3 +1,0 @@
-lorem ipsum text!
-and again more text!
-hint: try to hack me, try to get the the c:/work/text3.txt
