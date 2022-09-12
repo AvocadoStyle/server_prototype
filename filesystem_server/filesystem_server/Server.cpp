@@ -154,14 +154,14 @@ ServerInit::~ServerInit() {
 
 
 
-int main() {
-	ServerInit* server;
-	server = new ServerInit();
-
-	while (true) {
-		server->handleclient();
-	}
-
-
-	return 0;
-}
+//int main() {
+//	ServerInit* server;
+//	server = new ServerInit();
+//
+//	while (true) {
+//		server->handleclient();
+//	}
+//
+//
+//	return 0;
+//}

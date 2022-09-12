@@ -19,9 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FileUtilities.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="testerprototype.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileUtilities.h" />
     <ClInclude Include="MessageProtocol.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
