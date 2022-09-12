@@ -33,17 +33,17 @@ std::string ServerInit::__filetostring(const char* filename) {
 int ServerInit::__request_op_handle(int OP) {
 	if (OP == OP_SAVE) {
 		// save to fs
-
+		return 1;
 
 
 	} else if(OP == OP_RET){
 		// return from fs
-
+		return 1;
 
 
 	} else if(OP == OP_DEL){
 		// delete from fs
-		return SUCCESS_FILE_FOUND_NOTIFICATION
+		return SUCCESS_FILE_FOUND_NOTIFICATION;
 
 
 	}
@@ -65,6 +65,16 @@ void ServerInit::_handlerequest(SOCKET clientsocket) {
 	recv(clientsocket, clientmsg, 1024, 0);
 	std::cout << "client sent:" << std::endl;
 	std::cout << clientmsg << std::endl;
+
+
+
+	uint32_t user_id = 311137434;
+	uint8_t version = 1;
+	uint8_t OP = 100;
+	uint16_t name_len = 10;
+	std::string filename = "kakigadol.pdf";
+	uint32_t size = 1024;
+	std::string Payload = "kakigadol is a big kaki\nin the feature the kaki will be shilshuli";
 
 	//withdraw the OP code
 	__request_op_handle(100);
@@ -125,7 +135,7 @@ void ServerInit::_handlerequest(SOCKET clientsocket) {
 
 
 
-	send(clientsocket, msg.c_str(), msg.length(), 0);
+	//send(clientsocket, msg.c_str(), msg.length(), 0);
 
 	closesocket(clientsocket); // closing the socket
 }
