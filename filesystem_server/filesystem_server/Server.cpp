@@ -60,24 +60,44 @@ int ServerInit::__request_op_handle(int OP) {
 void ServerInit::_handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	std::cout << "client connected!" << std::endl;
-
 	char clientmsg[1024] = { 0 };
 	recv(clientsocket, clientmsg, 1024, 0);
-	std::cout << "client sent:" << std::endl;
-	std::cout << clientmsg << std::endl;
+	//std::cout << "client sent:" << std::endl;
+	//std::cout << clientmsg << std::endl;
+
+	//req_client_header.user_id = clientmsg[0]
+	std::cout << "client message is: " << unsigned int(clientmsg[]) << std::endl;
 
 
 
-	uint32_t user_id = 311137434;
-	uint8_t version = 1;
-	uint8_t OP = 100;
-	uint16_t name_len = 10;
-	std::string filename = "kakigadol.pdf";
-	uint32_t size = 1024;
-	std::string Payload = "kakigadol is a big kaki\nin the feature the kaki will be shilshuli";
 
-	//withdraw the OP code
-	__request_op_handle(100);
+
+
+
+
+
+
+
+
+
+	/*
+	* 
+	* 
+	* simulator to input, not real!
+	* 
+	* 
+	* 
+	*/
+	//uint32_t user_id = 311137434;
+	//uint8_t version = 1;
+	//uint8_t OP = 100;
+	//uint16_t name_len = 10;
+	//std::string filename = "kakigadol.pdf";
+	//uint32_t size = 1024;
+	//std::string Payload = "kakigadol is a big kaki\nin the feature the kaki will be shilshuli";
+
+	////withdraw the OP code
+	//__request_op_handle(100);
 
 
 
@@ -136,7 +156,6 @@ void ServerInit::_handlerequest(SOCKET clientsocket) {
 
 
 	//send(clientsocket, msg.c_str(), msg.length(), 0);
-
 	closesocket(clientsocket); // closing the socket
 }
 
@@ -154,14 +173,14 @@ ServerInit::~ServerInit() {
 
 
 
-//int main() {
-//	ServerInit* server;
-//	server = new ServerInit();
-//
-//	while (true) {
-//		server->handleclient();
-//	}
-//
-//
-//	return 0;
-//}
+int main() {
+	ServerInit* server;
+	server = new ServerInit();
+
+	while (true) {
+		server->handleclient();
+	}
+
+
+	return 0;
+}
