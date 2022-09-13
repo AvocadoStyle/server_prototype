@@ -21,12 +21,14 @@
   <ItemGroup>
     <ClCompile Include="FileUtilities.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerController.cpp" />
     <ClCompile Include="testerprototype.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileUtilities.h" />
     <ClInclude Include="MessageProtocol.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="ServerController.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -28,7 +28,7 @@ struct request_header {
     uint8_t version;
     uint8_t op;
     uint16_t name_len;
-    uint8_t* filename; //need to make it dynamic
+    uint8_t filename[1024]; //need to make it dynamic
 };
 
 
