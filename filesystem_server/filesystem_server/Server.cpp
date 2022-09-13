@@ -1,6 +1,6 @@
 #include "Server.h"
 #include "MessageProtocol.h"
-
+#include <vector>
 
 
 
@@ -60,83 +60,44 @@ int ServerInit::__request_op_handle(int OP) {
 void ServerInit::_handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	std::cout << "client connected!" << std::endl;
-
 	char clientmsg[1024] = { 0 };
 	recv(clientsocket, clientmsg, 1024, 0);
 	std::cout << "client sent:" << std::endl;
 	std::cout << clientmsg << std::endl;
 
+	//req_client_header.user_id = clientmsg[0]
+	//std::cout << "client message is: " << unsigned int(clientmsg[]) << std::endl;
+
+	std::cout << "client message is: " << clientmsg << std::endl;
 
 
-	uint32_t user_id = 311137434;
-	uint8_t version = 1;
-	uint8_t OP = 100;
-	uint16_t name_len = 10;
-	std::string filename = "kakigadol.pdf";
-	uint32_t size = 1024;
-	std::string Payload = "kakigadol is a big kaki\nin the feature the kaki will be shilshuli";
-
-	//withdraw the OP code
-	__request_op_handle(100);
+	std::stringstream ss;
+	std::string a = clientmsg;
+	int len = a.length();
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//std::string recv_msg = clientmsg;
-	//size_t spos = recv_msg.find("GET /");
-	//size_t epos = recv_msg.find("HTTP", spos + 5);
-	//std::string reqfile = recv_msg.substr(spos + 5, epos - 6);
-	//std::cout << "Requested file: " << reqfile << "|" << std::endl;
-
-	//the server will send echo to the client that the message have been recieved
-	//std::string msg;
-	//msg = "HTTP/1.1 200 OK\n\n";
-
-	//if (reqfile.empty()) {
-	//	//index.html ->>>> msg+= filetostring("index.html") >>>> make index.html to string.
-	//	msg += __filetostring("index.html");
-	//}
-	//else {
-	//	//load reqfile ->>>> msg+= filetostring(reqfile.c_str()); >>>> file requested if inside the server
-	//	msg += __filetostring(reqfile.c_str());
-	//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	char* my_s_bytes = reinterpret_cast<char*>(&req_client_header);
+	my_s_bytes[0] = (int)clientmsg[0];
+	my_s_bytes[1] = (int)clientmsg[1];
+	my_s_bytes[2] = (int)clientmsg[2];
+	my_s_bytes[3] = (int)clientmsg[3];
+	std::cout << "user_id: " << req_client_header.user_id << std::endl;
+	my_s_bytes[4] = (int)clientmsg[4];
+	std::cout << "version: " << req_client_header.version << std::endl;
+	my_s_bytes[5] = (int)clientmsg[5];
+	std::cout << "OP: " << req_client_header.op << std::endl;
+	my_s_bytes[6] = (int)clientmsg[6];
+	my_s_bytes[7] = (int)clientmsg[7];
+	std::cout << "name_len: " << req_client_header.name_len << std::endl;
+	for (int i = 8; i < sizeof(clientmsg); i++) {
+		my_s_bytes[i] = (int)clientmsg[i];
+	}
+	std::cout << "file_name: " << req_client_header.filename << std::endl;
 
 
 
 	//send(clientsocket, msg.c_str(), msg.length(), 0);
-
 	closesocket(clientsocket); // closing the socket
 }
 

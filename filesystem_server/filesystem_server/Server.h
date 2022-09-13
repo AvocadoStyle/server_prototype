@@ -18,6 +18,7 @@
 #include <sstream>
 
 #include <stdint.h>
+#include "MessageProtocol.h"
 
 #define PORT 8085
 
@@ -33,6 +34,8 @@ int ERR_NO_FILES_FOR_CLIENT = 1002;
 int GENERAL_ERR = 1003;
 
 std::string REPOSITORY_PATH = "C:\\backupsvr";
+
+request_header req_client_header;
 
 class ServerInit {
 public:
