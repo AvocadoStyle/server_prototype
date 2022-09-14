@@ -2,7 +2,7 @@
 #define __MESSAGE_PROTOCOL_H__
 
 
-#include "Server.h"
+
 
 #define MESSAGE_SIZE 6
 
@@ -41,14 +41,7 @@ struct request_from_client{
         char buff_request[(sizeof(req_head) + sizeof(size))];
     };
 };
-//
-//
-//
-//
-//
-//
-//
-//
+
 //
 //
 //

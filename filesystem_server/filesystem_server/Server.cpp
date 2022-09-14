@@ -1,8 +1,8 @@
 #include "Server.h"
-#include "MessageProtocol.h"
 #include <vector>
 
-
+/* global values*/
+std::string REPOSITORY_PATH = "C:\\backupsvr"; // name of the server main directory
 
 
 ServerInit::ServerInit() {
@@ -15,12 +15,6 @@ ServerInit::ServerInit() {
 	bind(serversocket, (struct sockaddr*)&sa, sizeof(sa));
 	listen(serversocket, SOMAXCONN);
 	std::cout << "listening on port " << PORT << std::endl;
-}
-
-void ServerInit::_userConnect() {
-	// accept() - blocking, waiting for client to connect the server.
-	std::cout << "waiting for clients to connect.." << std::endl;
-	//std::cout << "client connected!" << std::endl;
 }
 
 std::string ServerInit::__filetostring(const char* filename) {
@@ -57,7 +51,7 @@ int ServerInit::__request_op_handle(int OP) {
 	}
 }
 
-void ServerInit::_handlerequest(SOCKET clientsocket) {
+void ServerInit::handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	std::cout << "client connected!" << std::endl;
 	char clientmsg[1024] = { 0 };
@@ -71,12 +65,12 @@ void ServerInit::_handlerequest(SOCKET clientsocket) {
 	std::cout << "client message is: " << clientmsg << std::endl;
 
 
-	std::stringstream ss;
-	std::string a = clientmsg;
-	int len = a.length();
+	//std::stringstream ss;
+	//std::string a = clientmsg;
+	//int len = a.length();
 
 
-
+	request_header req_client_header;
 	char* my_s_bytes = reinterpret_cast<char*>(&req_client_header);
 	my_s_bytes[0] = (int)clientmsg[0];
 	my_s_bytes[1] = (int)clientmsg[1];
@@ -87,42 +81,22 @@ void ServerInit::_handlerequest(SOCKET clientsocket) {
 	std::cout << "version: " << req_client_header.version << std::endl;
 	my_s_bytes[5] = (int)clientmsg[5];
 	std::cout << "OP: " << req_client_header.op << std::endl;
-	my_s_bytes[6] = (int)clientmsg[6];
 	my_s_bytes[7] = (int)clientmsg[7];
 	std::cout << "name_len: " << req_client_header.name_len << std::endl;
 	for (int i = 8; i < sizeof(clientmsg); i++) {
 		my_s_bytes[i] = (int)clientmsg[i];
+	my_s_bytes[6] = (int)clientmsg[6];
 	}
 	std::cout << "file_name: " << req_client_header.filename << std::endl;
 
 
-
+	Sleep(10000);
 	//send(clientsocket, msg.c_str(), msg.length(), 0);
+	std::cout << req_client_header.filename <<"client finish" << std::endl;
 	closesocket(clientsocket); // closing the socket
-}
-
-void ServerInit::handleclient() {
-	this->_userConnect();
-	SOCKET clientsocket = accept(serversocket, NULL, NULL);
-	std::thread ct(_handlerequest, clientsocket);
-	ct.detach();
 }
 
 
 ServerInit::~ServerInit() {
 	WSACleanup();
-}
-
-
-
-int main() {
-	ServerInit* server;
-	server = new ServerInit();
-
-	while (true) {
-		server->handleclient();
-	}
-
-
-	return 0;
 }
