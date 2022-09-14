@@ -51,6 +51,29 @@ int ServerInit::__request_op_handle(int OP) {
 	}
 }
 
+void ServerInit::__message_handle_main(char* clientmsg, char* header_bytes_reference, char* payload_bytes_reference,
+	request_header* req_client_header) {
+	this->__message_handle_header(clientmsg, header_bytes_reference, req_client_header);
+
+}
+void ServerInit::__message_handle_header(char* clientmsg, char* header_bytes_reference,
+	request_header* req_client_header) {
+	this->__message_handle_userid(clientmsg, header_bytes_reference, req_client_header);
+}
+void ServerInit::__message_handle_userid(char* clientmsg, char* header_bytes_reference,
+	request_header* req_client_header) {
+	for (int i = USER_ID_STARTBYTE_H__; i < USER_ID_BYTESIZE_H__; i++) {
+		header_bytes_reference[i] = (int)clientmsg[i];
+		std::cout << "user_id: " << req_client_header->user_id << std::endl;
+	}
+}
+void ServerInit::__message_handle_version(char* clientmsg, char* header_bytes_reference,
+	request_header* req_client_header) {
+	header_bytes_reference[VERSION_STARTBYTE_H__] = (int)clientmsg[VERSION_STARTBYTE_H__];
+	std::cout << "version: " << req_client_header->version<< std::endl;
+}
+
+
 void ServerInit::handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	std::cout << "client connected!" << std::endl;
@@ -69,26 +92,30 @@ void ServerInit::handlerequest(SOCKET clientsocket) {
 	//std::string a = clientmsg;
 	//int len = a.length();
 
-
+	
 	request_header req_client_header;
-	char* my_s_bytes = reinterpret_cast<char*>(&req_client_header);
-	my_s_bytes[0] = (int)clientmsg[0];
-	my_s_bytes[1] = (int)clientmsg[1];
-	my_s_bytes[2] = (int)clientmsg[2];
-	my_s_bytes[3] = (int)clientmsg[3];
+	request_payload req_client_payload;
+	char* header_bytes_reference = reinterpret_cast<char*>(&req_client_header);
+	char* payload_bytes_reference = reinterpret_cast<char*>(&req_client_payload);
+
+	header_bytes_reference[0] = (int)clientmsg[0];
+	header_bytes_reference[1] = (int)clientmsg[1];
+	header_bytes_reference[2] = (int)clientmsg[2];
+	header_bytes_reference[3] = (int)clientmsg[3];
 	std::cout << "user_id: " << req_client_header.user_id << std::endl;
-	my_s_bytes[4] = (int)clientmsg[4];
+	header_bytes_reference[4] = (int)clientmsg[4];
 	std::cout << "version: " << req_client_header.version << std::endl;
-	my_s_bytes[5] = (int)clientmsg[5];
+	header_bytes_reference[5] = (int)clientmsg[5];
 	std::cout << "OP: " << req_client_header.op << std::endl;
-	my_s_bytes[7] = (int)clientmsg[7];
+	header_bytes_reference[7] = (int)clientmsg[7];
 	std::cout << "name_len: " << req_client_header.name_len << std::endl;
 	for (int i = 8; i < sizeof(clientmsg); i++) {
-		my_s_bytes[i] = (int)clientmsg[i];
-	my_s_bytes[6] = (int)clientmsg[6];
+		header_bytes_reference[i] = (int)clientmsg[i];
+		header_bytes_reference[6] = (int)clientmsg[6];
 	}
-	std::cout << "file_name: " << req_client_header.filename << std::endl;
+	std::cout << "user_id: " << req_client_header.user_id << std::endl;
 
+	this->__message_handle_main(clientmsg, header_bytes_reference, payload_bytes_reference, &req_client_header);
 
 	Sleep(10000);
 	//send(clientsocket, msg.c_str(), msg.length(), 0);

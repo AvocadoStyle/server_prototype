@@ -28,8 +28,15 @@ struct request_header {
     uint8_t version;
     uint8_t op;
     uint16_t name_len;
-    uint8_t filename[1024]; //need to make it dynamic
+    uint8_t filename[256]; //need to make it dynamic with `name_len`
 };
+
+struct request_payload {
+    uint32_t size;
+    uint8_t filename[1024]; //need to make it dynamic with `size`
+};
+
+
 
 
 
