@@ -59,20 +59,34 @@ void ServerInit::__message_handle_main(char* clientmsg, char* header_bytes_refer
 void ServerInit::__message_handle_header(char* clientmsg, char* header_bytes_reference,
 	request_header* req_client_header) {
 	this->__message_handle_userid(clientmsg, header_bytes_reference, req_client_header);
+	this->__message_handle_version(clientmsg, header_bytes_reference, req_client_header);
+	this->__message_handle_op(clientmsg, header_bytes_reference, req_client_header);
+	this->__message_handle_name_len_and_file_name(clientmsg, header_bytes_reference, req_client_header);
 }
 void ServerInit::__message_handle_userid(char* clientmsg, char* header_bytes_reference,
 	request_header* req_client_header) {
 	for (int i = USER_ID_STARTBYTE_H__; i < USER_ID_BYTESIZE_H__; i++) {
 		header_bytes_reference[i] = (int)clientmsg[i];
-		std::cout << "user_id: " << req_client_header->user_id << std::endl;
 	}
+	std::cout << "user_id: " << req_client_header->user_id << std::endl;
 }
 void ServerInit::__message_handle_version(char* clientmsg, char* header_bytes_reference,
 	request_header* req_client_header) {
 	header_bytes_reference[VERSION_STARTBYTE_H__] = (int)clientmsg[VERSION_STARTBYTE_H__];
 	std::cout << "version: " << req_client_header->version<< std::endl;
 }
-
+void ServerInit::__message_handle_op(char* clientmsg, char* header_bytes_reference,
+	request_header* req_client_header) {
+	header_bytes_reference[OP_STARTBYTE_H__] = (int)clientmsg[OP_STARTBYTE_H__];
+	std::cout << "op: " << req_client_header->op << std::endl;
+}
+void ServerInit::__message_handle_name_len_and_file_name(char* clientmsg, char* header_bytes_reference,
+	request_header* req_client_header) {
+	for (int i = NAME_LEN_STARTBYTE_H__; i < (NAME_LEN_STARTBYTE_H__+NAME_LEN_BYTESIZE_H__); i++) {
+		header_bytes_reference[i] = (int)clientmsg[i];
+	}
+	std::cout << "name_en: " << req_client_header->name_len << std::endl;
+}
 
 void ServerInit::handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
