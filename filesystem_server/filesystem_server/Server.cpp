@@ -85,7 +85,7 @@ void ServerInit::__message_handle_name_len_and_file_name(char* clientmsg, char* 
 	for (int i = NAME_LEN_STARTBYTE_H__; i < (NAME_LEN_STARTBYTE_H__+NAME_LEN_BYTESIZE_H__); i++) {
 		header_bytes_reference[i] = (int)clientmsg[i];
 	}
-	std::cout << "name_en: " << req_client_header->name_len << std::endl;
+	std::cout << "name_len: " << req_client_header->name_len << std::endl;
 }
 
 void ServerInit::handlerequest(SOCKET clientsocket) {
@@ -94,46 +94,18 @@ void ServerInit::handlerequest(SOCKET clientsocket) {
 	char clientmsg[1024] = { 0 };
 	recv(clientsocket, clientmsg, 1024, 0);
 	std::cout << "client sent:" << std::endl;
-	std::cout << clientmsg << std::endl;
-
-	//req_client_header.user_id = clientmsg[0]
-	//std::cout << "client message is: " << unsigned int(clientmsg[]) << std::endl;
-
 	std::cout << "client message is: " << clientmsg << std::endl;
 
-
-	//std::stringstream ss;
-	//std::string a = clientmsg;
-	//int len = a.length();
-
-	
 	request_header req_client_header;
 	request_payload req_client_payload;
 	char* header_bytes_reference = reinterpret_cast<char*>(&req_client_header);
 	char* payload_bytes_reference = reinterpret_cast<char*>(&req_client_payload);
 
-	header_bytes_reference[0] = (int)clientmsg[0];
-	header_bytes_reference[1] = (int)clientmsg[1];
-	header_bytes_reference[2] = (int)clientmsg[2];
-	header_bytes_reference[3] = (int)clientmsg[3];
-	std::cout << "user_id: " << req_client_header.user_id << std::endl;
-	header_bytes_reference[4] = (int)clientmsg[4];
-	std::cout << "version: " << req_client_header.version << std::endl;
-	header_bytes_reference[5] = (int)clientmsg[5];
-	std::cout << "OP: " << req_client_header.op << std::endl;
-	header_bytes_reference[7] = (int)clientmsg[7];
-	std::cout << "name_len: " << req_client_header.name_len << std::endl;
-	for (int i = 8; i < sizeof(clientmsg); i++) {
-		header_bytes_reference[i] = (int)clientmsg[i];
-		header_bytes_reference[6] = (int)clientmsg[6];
-	}
-	std::cout << "user_id: " << req_client_header.user_id << std::endl;
-
 	this->__message_handle_main(clientmsg, header_bytes_reference, payload_bytes_reference, &req_client_header);
 
-	Sleep(10000);
+	//Sleep(10000);
 	//send(clientsocket, msg.c_str(), msg.length(), 0);
-	std::cout << req_client_header.filename <<"client finish" << std::endl;
+	std::cout <<"client finish" << std::endl;
 	closesocket(clientsocket); // closing the socket
 }
 
