@@ -71,6 +71,7 @@ void ServerInit::__message_handle_header(char* clientmsg, char* header_bytes_ref
 	int file_name_length = int(req_client_header->name_len);
 	this->__message_handle_utility_header(clientmsg, header_bytes_reference, req_client_header, FILE_NAME_STARTBYTE_H__,
 		file_name_length);
+	req_client_header->filename[file_name_length] = '\0';
 	std::cout << "user_id: " << int(req_client_header->user_id) << std::endl;
 	std::cout << "version: " << int(req_client_header->version) << std::endl;
 	std::cout << "op: " << int(req_client_header->op) << std::endl;
@@ -80,22 +81,15 @@ void ServerInit::__message_handle_header(char* clientmsg, char* header_bytes_ref
 
 void ServerInit::__message_handle_payload(char* clientmsg, char* payload_bytes_reference, char* header_bytes_reference,
 	request_payload* req_client_payload, request_header* req_client_header) {
-	int size_payload_start_byte = int(req_client_header->name_len) + SIZE_PAYLOAD_STARTBYTE_P__;
-	std::cout << "size start byte is: " << size_payload_start_byte << std::endl;
-
-	this->__message_handle_utility_payload(clientmsg, payload_bytes_reference, req_client_payload, size_payload_start_byte,
+	char* new_client_msg_without_prev = clientmsg + (int(req_client_header->name_len) + PREV_BYTE_VALUE_HP__);
+	this->__message_handle_utility_payload(new_client_msg_without_prev, payload_bytes_reference, req_client_payload, SIZE_PAYLOAD_STARTBYTE_P__,
 		SIZE_PAYLOAD_BYTESIZE_P__);
 	int payload_length = int(req_client_payload->size);
-	//this->__message_handle_utility_payload(clientmsg, payload_bytes_reference, req_client_payload, size_payload_start_byte+ SIZE_PAYLOAD_STARTBYTE_P__,
-	//	payload_length);
-
-	std::cout << "size: " << (req_client_payload->size) << std::endl;
-	//std::cout << "payload: " << (req_client_payload->payload) << std::endl;
-
-	//int payload_length = int(req_client_payload->size);
-	//std::cout << "size_payload: " << (req_client_payload->size) << std::endl;
-	/*this->__message_handle_utility_payload(clientmsg, payload_bytes_reference,
-		req_client_payload, );*/
+	this->__message_handle_utility_payload(new_client_msg_without_prev, payload_bytes_reference, req_client_payload, PAYLOAD_PAYLOAD_STARTBYTE_P__,
+		payload_length);
+	req_client_payload->payload[payload_length] = '\0';
+	std::cout << "size: " << int(req_client_payload->size) << std::endl;
+	std::cout << "payload: " << (req_client_payload->payload) << std::endl;
 }
 
 void ServerInit::__message_handle_utility_header(char* clientmsg, char* header_bytes_reference,

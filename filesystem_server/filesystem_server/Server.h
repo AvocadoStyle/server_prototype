@@ -36,6 +36,7 @@
 #define OP_STARTBYTE_H__						5
 #define NAME_LEN_STARTBYTE_H__					6
 #define FILE_NAME_STARTBYTE_H__					8
+#define PREV_BYTE_VALUE_HP__					9 //or 9
 #define SIZE_PAYLOAD_STARTBYTE_P__				0 
 #define PAYLOAD_PAYLOAD_STARTBYTE_P__			4 
 /*requests*/
