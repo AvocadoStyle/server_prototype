@@ -105,6 +105,18 @@ void ServerInit::__message_handle_utility_payload(char* clientmsg, char* payload
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
 void ServerInit::handlerequest(SOCKET clientsocket) {
 	// receive the message from the client max len 1024.
 	std::cout << "client connected!" << std::endl;

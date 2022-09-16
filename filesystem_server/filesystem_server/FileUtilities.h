@@ -18,6 +18,7 @@ public:
 	//bool file_close();
 	bool file_write(std::string file_name);
 	std::string file_read(std::string file_name);
+	std::ofstream output_file;
 
 	std::string get_files_names_list();
 	bool is_file_exists();
