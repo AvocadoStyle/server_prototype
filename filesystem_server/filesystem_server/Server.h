@@ -35,7 +35,9 @@
 #define VERSION_STARTBYTE_H__					4
 #define OP_STARTBYTE_H__						5
 #define NAME_LEN_STARTBYTE_H__					6
-#define SIZE_PAYLOAD_STARTBYTE_P__				1000 // todo
+#define FILE_NAME_STARTBYTE_H__					8
+#define SIZE_PAYLOAD_STARTBYTE_P__				0 
+#define PAYLOAD_PAYLOAD_STARTBYTE_P__			4 
 /*requests*/
 #define OP_SAVE									100
 #define OP_RET									200
@@ -66,29 +68,30 @@ public:
 	void handlerequest(SOCKET clientsocket);
 
 private:
-
-	std::string __filetostring(const char* filename);
-
-	int __request_op_handle(int operation);
-
+	/* client message handler */
 	void __message_handle_main(char* clientmsg, char* header_bytes_reference, char* payload_bytes_reference,
-		request_header* req_client_header);
+		request_header* req_client_header, request_payload* req_client_payload);
+	// for header and payload handlers
 	void __message_handle_header(char* clientmsg, char* header_bytes_reference,
 		request_header* req_client_header);
-	void __message_handle_payload(char* clientmsg, char* payload_bytes_reference,
-		request_header* req_client_header);
-	void __message_handle_userid(char* clientmsg, char* header_bytes_reference,
-		request_header* req_client_header);
-	void __message_handle_version(char* clientmsg, char* header_bytes_reference,
-		request_header* req_client_header);
-	void __message_handle_op(char* clientmsg, char* header_bytes_reference,
-		request_header* req_client_header);
-	void __message_handle_name_len_and_file_name(char* clientmsg, char* header_bytes_reference,
-		request_header* req_client_header);
-	void __message_handle_size_and_payload(char* clientmsg, char* payload_bytes_reference,
-		request_header* req_client_header);
-};
+	void __message_handle_payload(char* clientmsg, char* payload_bytes_reference, char* header_bytes_reference,
+		request_payload* req_client_payload, request_header* req_client_header);
+	//utility that build the struct datatype for header and payload
+	void __message_handle_utility_header(char* clientmsg, char* header_bytes_reference,
+		request_header* req_client_header, int startbyte, int bytesize);
+	void __message_handle_utility_payload(char* clientmsg, char* payload_bytes_reference,
+		request_payload* req_client_payload, int startbyte, int bytesize);
 
+	/*request handler*/
+	int __request_op_handle(int operation);
+
+	/*helper functions*/
+	std::string __filetostring(const char* filename);
+
+
+
+
+};
 
 
 #endif

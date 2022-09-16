@@ -52,40 +52,63 @@ int ServerInit::__request_op_handle(int OP) {
 }
 
 void ServerInit::__message_handle_main(char* clientmsg, char* header_bytes_reference, char* payload_bytes_reference,
-	request_header* req_client_header) {
+	request_header* req_client_header, request_payload* req_client_payload) {
 	this->__message_handle_header(clientmsg, header_bytes_reference, req_client_header);
-
+	this->__message_handle_payload(clientmsg, payload_bytes_reference, header_bytes_reference,
+		req_client_payload, req_client_header);
 }
 void ServerInit::__message_handle_header(char* clientmsg, char* header_bytes_reference,
 	request_header* req_client_header) {
-	this->__message_handle_userid(clientmsg, header_bytes_reference, req_client_header);
-	this->__message_handle_version(clientmsg, header_bytes_reference, req_client_header);
-	this->__message_handle_op(clientmsg, header_bytes_reference, req_client_header);
-	this->__message_handle_name_len_and_file_name(clientmsg, header_bytes_reference, req_client_header);
+
+	this->__message_handle_utility_header(clientmsg, header_bytes_reference, req_client_header, USER_ID_STARTBYTE_H__,
+		USER_ID_BYTESIZE_H__);
+	this->__message_handle_utility_header(clientmsg, header_bytes_reference, req_client_header, VERSION_STARTBYTE_H__,
+		VERSION_BYTESIZE_H__);
+	this->__message_handle_utility_header(clientmsg, header_bytes_reference, req_client_header, OP_STARTBYTE_H__,
+		OP_BYTESIZE_H__);
+	this->__message_handle_utility_header(clientmsg, header_bytes_reference, req_client_header, NAME_LEN_STARTBYTE_H__,
+		NAME_LEN_BYTESIZE_H__);
+	int file_name_length = int(req_client_header->name_len);
+	this->__message_handle_utility_header(clientmsg, header_bytes_reference, req_client_header, FILE_NAME_STARTBYTE_H__,
+		file_name_length);
+	std::cout << "user_id: " << int(req_client_header->user_id) << std::endl;
+	std::cout << "version: " << int(req_client_header->version) << std::endl;
+	std::cout << "op: " << int(req_client_header->op) << std::endl;
+	std::cout << "name_len: " << int(req_client_header->name_len) << std::endl;
+	std::cout << "file_name: " << (req_client_header->filename) << std::endl;
 }
-void ServerInit::__message_handle_userid(char* clientmsg, char* header_bytes_reference,
-	request_header* req_client_header) {
-	for (int i = USER_ID_STARTBYTE_H__; i < USER_ID_BYTESIZE_H__; i++) {
+
+void ServerInit::__message_handle_payload(char* clientmsg, char* payload_bytes_reference, char* header_bytes_reference,
+	request_payload* req_client_payload, request_header* req_client_header) {
+	int size_payload_start_byte = int(req_client_header->name_len) + SIZE_PAYLOAD_STARTBYTE_P__;
+	std::cout << "size start byte is: " << size_payload_start_byte << std::endl;
+
+	this->__message_handle_utility_payload(clientmsg, payload_bytes_reference, req_client_payload, size_payload_start_byte,
+		SIZE_PAYLOAD_BYTESIZE_P__);
+	int payload_length = int(req_client_payload->size);
+	//this->__message_handle_utility_payload(clientmsg, payload_bytes_reference, req_client_payload, size_payload_start_byte+ SIZE_PAYLOAD_STARTBYTE_P__,
+	//	payload_length);
+
+	std::cout << "size: " << (req_client_payload->size) << std::endl;
+	//std::cout << "payload: " << (req_client_payload->payload) << std::endl;
+
+	//int payload_length = int(req_client_payload->size);
+	//std::cout << "size_payload: " << (req_client_payload->size) << std::endl;
+	/*this->__message_handle_utility_payload(clientmsg, payload_bytes_reference,
+		req_client_payload, );*/
+}
+
+void ServerInit::__message_handle_utility_header(char* clientmsg, char* header_bytes_reference,
+	request_header* req_client_header, int startbyte, int bytesize) {
+	for (int i = startbyte; i < startbyte + bytesize; i++) {
 		header_bytes_reference[i] = (int)clientmsg[i];
 	}
-	std::cout << "user_id: " << req_client_header->user_id << std::endl;
 }
-void ServerInit::__message_handle_version(char* clientmsg, char* header_bytes_reference,
-	request_header* req_client_header) {
-	header_bytes_reference[VERSION_STARTBYTE_H__] = (int)clientmsg[VERSION_STARTBYTE_H__];
-	std::cout << "version: " << req_client_header->version<< std::endl;
-}
-void ServerInit::__message_handle_op(char* clientmsg, char* header_bytes_reference,
-	request_header* req_client_header) {
-	header_bytes_reference[OP_STARTBYTE_H__] = (int)clientmsg[OP_STARTBYTE_H__];
-	std::cout << "op: " << req_client_header->op << std::endl;
-}
-void ServerInit::__message_handle_name_len_and_file_name(char* clientmsg, char* header_bytes_reference,
-	request_header* req_client_header) {
-	for (int i = NAME_LEN_STARTBYTE_H__; i < (NAME_LEN_STARTBYTE_H__+NAME_LEN_BYTESIZE_H__); i++) {
-		header_bytes_reference[i] = (int)clientmsg[i];
+void ServerInit::__message_handle_utility_payload(char* clientmsg, char* payload_bytes_reference,
+	request_payload* req_client_payload, int startbyte, int bytesize) {
+	for (int i = startbyte; i < startbyte + bytesize; i++) {
+		payload_bytes_reference[i] = (int)clientmsg[i];
 	}
-	std::cout << "name_len: " << req_client_header->name_len << std::endl;
 }
 
 void ServerInit::handlerequest(SOCKET clientsocket) {
@@ -101,7 +124,8 @@ void ServerInit::handlerequest(SOCKET clientsocket) {
 	char* header_bytes_reference = reinterpret_cast<char*>(&req_client_header);
 	char* payload_bytes_reference = reinterpret_cast<char*>(&req_client_payload);
 
-	this->__message_handle_main(clientmsg, header_bytes_reference, payload_bytes_reference, &req_client_header);
+	this->__message_handle_main(clientmsg, header_bytes_reference, payload_bytes_reference, &req_client_header,
+		&req_client_payload);
 
 	//Sleep(10000);
 	//send(clientsocket, msg.c_str(), msg.length(), 0);

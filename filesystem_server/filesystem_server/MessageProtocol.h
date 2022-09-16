@@ -33,7 +33,7 @@ struct request_header {
 
 struct request_payload {
     uint32_t size;
-    uint8_t filename[1024]; //need to make it dynamic with `size`
+    uint8_t payload[1024]; //need to make it dynamic with `size`
 };
 
 
