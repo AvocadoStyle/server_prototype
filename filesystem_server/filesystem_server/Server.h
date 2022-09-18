@@ -19,6 +19,7 @@
 
 /*my libs*/
 #include "MessageProtocol.h"
+#include "FileUtilities.h"
 
 /*server dependencies*/
 #define PORT									8085
@@ -68,10 +69,14 @@ public:
 
 	void handlerequest(SOCKET clientsocket);
 
-private:
+protected:
+	/*request handler*/
+	char* _request_op_handle(request_header* req_client_header, request_payload* req_client_payload);
 	/* client message handler */
-	void __message_handle_main(char* clientmsg, char* header_bytes_reference, char* payload_bytes_reference,
+	void _message_handle_main(char* clientmsg, char* header_bytes_reference, char* payload_bytes_reference,
 		request_header* req_client_header, request_payload* req_client_payload);
+private:
+	/*client message handler helpers*/
 	// for header and payload handlers
 	void __message_handle_header(char* clientmsg, char* header_bytes_reference,
 		request_header* req_client_header);
@@ -83,11 +88,15 @@ private:
 	void __message_handle_utility_payload(char* clientmsg, char* payload_bytes_reference,
 		request_payload* req_client_payload, int startbyte, int bytesize);
 
-	/*request handler*/
-	int __request_op_handle(int operation);
+	/*op handler helpers*/
+	char* __save_handle_op(FileUtilities *fu, request_header* req_client_header, request_payload* req_client_payload);
+	char* __return_handle_op(FileUtilities *fu, request_header* req_client_header, request_payload* req_client_payload);
+	char* __delete_handle_op(FileUtilities *fu, request_header* req_client_header, request_payload* req_client_payload);
+	char* __alllist_handle_op(FileUtilities *fu, request_header* req_client_header, request_payload* req_client_payload);
+
 
 	/*helper functions*/
-	std::string __filetostring(const char* filename);
+	//std::string __filetostring(const char* filename);
 
 
 

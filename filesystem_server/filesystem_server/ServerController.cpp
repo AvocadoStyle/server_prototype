@@ -2,7 +2,7 @@
 /*
 * initialize the ServerInit 
 */
-ServerInit* server = new ServerInit();
+ServerInit* server = new ServerInit(); // get it inside main.
 
 /*
 * client handle request with threads, it will receive the client request and handle it.
@@ -20,10 +20,9 @@ void whatVersion() {
 }
 
 int main() {
-	//whatVersion();
-	//while (true) {
-	//	std::cout << "waiting for clients to connect.." << std::endl;
-	//	std::thread client_thread(handle_request, accept(server->serversocket, NULL, NULL));
-	//	client_thread.detach();
-	//}
+	while (true) {
+		std::cout << "waiting for clients to connect.." << std::endl;
+		std::thread client_thread(handle_request, accept(server->serversocket, NULL, NULL));
+		client_thread.detach();
+	}
 }
