@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileUtilities.h" />
+    <ClInclude Include="Header.h" />
     <ClInclude Include="MessageProtocol.h" />
     <ClInclude Include="Server.h" />
     <ClInclude Include="ServerController.h" />

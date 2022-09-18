@@ -2,7 +2,7 @@
 #define __MESSAGE_PROTOCOL_H__
 
 
-#include "Server.h"
+
 
 #define MESSAGE_SIZE 6
 
@@ -23,40 +23,56 @@
 //};
 //
 //
+
 struct request_header {
     uint32_t user_id;
     uint8_t version;
     uint8_t op;
     uint16_t name_len;
-    uint8_t filename[1024]; //need to make it dynamic
+    char filename[256]; //need to make it dynamic with `name_len`
+};
+
+struct request_payload {
+    uint32_t size;
+    char payload[65536]; //need to make it dynamic with `size`
+};
+
+struct response_header {
+    uint8_t version;
+    uint16_t status;
+    uint16_t name_len;
+    char filename[256]; //need to make it dynamic with `name_len`
+};
+
+struct response_payload {
+    uint32_t size;
+    char payload[65536]; //need to make it dynamic with `size`
 };
 
 
 
-struct request_from_client{
-    int type_head_or_payload;
-    union payload {
-        request_header req_head;
-        uint32_t size;
-        char buff_request[(sizeof(req_head) + sizeof(size))];
-    };
-};
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
+
+
+
+
+
+
+
+
+
+
+
+
+//struct request_from_client{
+//    int type_head_or_payload;
+//    union payload {
+//        request_header req_head;
+//        uint32_t size;
+//        char buff_request[(sizeof(req_head) + sizeof(size))];
+//    };
+//};
+
 //typedef struct RequestHeader
 //{
 //    uint32_t userId;        // User ID
